@@ -22,6 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-g*g7qv5h^5=xvq@zka9b-@0wo@yp5e2yo6c)2_7wdmcbf(2p$9'
 
+COMPANY_NAME = 'RunTracker'
+SLOGAN = 'Управляй своими забегами как профи'
+CONTACTS = 'Город Минск, улица Интернациональная, дом 31'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
