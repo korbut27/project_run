@@ -6,7 +6,7 @@ from django.conf import settings
 from django.shortcuts import render
 
 from app_run.models import Run
-from app_run.serializers import RunSerializer, UserSerializer
+from app_run.serializers import UserSerializer, RunReadSerializer, RunWriteSerializer
 
 
 # Create your views here.
@@ -21,7 +21,11 @@ def company_details(request):
 
 class RunViewSet(viewsets.ModelViewSet):
     queryset = Run.objects.select_related('athlete').all()
-    serializer_class = RunSerializer
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return RunReadSerializer
+        return RunWriteSerializer
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.filter(is_superuser=False)
