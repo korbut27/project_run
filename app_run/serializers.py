@@ -16,22 +16,19 @@ class UserSerializer(serializers.ModelSerializer):
             return 'coach'
         return 'athlete'
 
-class AthleteSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'last_name', 'first_name']
-
-
-class RunReadSerializer(serializers.ModelSerializer):
-    athlete_data = AthleteSerializer(source="athlete", read_only=True)
-
-    class Meta:
-        model = Run
-        fields = ['id', 'created_at', 'comment', 'athlete_data']
-
-class RunWriteSerializer(serializers.ModelSerializer):
+class RunSerializer(serializers.ModelSerializer):
+    athlete_data = serializers.SerializerMethodField()
 
     class Meta:
         model = Run
         fields = '__all__'
+
+    def get_athlete_data(self, obj):
+        if hasattr(obj, 'athlete') and obj.athlete:
+            return {
+                'id': obj.athlete.id,
+                'username': obj.athlete.username,
+                'last_name': obj.athlete.last_name,
+                'first_name': obj.athlete.first_name
+            }
+        return None
