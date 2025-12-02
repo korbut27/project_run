@@ -21,7 +21,7 @@ def company_details(request):
 
 
 class RunViewSet(viewsets.ModelViewSet):
-    queryset = Run.objects.all()
+    queryset = Run.objects.select_related('athlete').all()
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -33,7 +33,6 @@ class RunViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         run = serializer.save()
 
-        # Сериализация сохраненного объекта с помощью RunReadSerializer
         read_serializer = RunReadSerializer(run, context={'request': request})
         return Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
