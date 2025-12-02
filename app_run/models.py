@@ -6,4 +6,4 @@ from django.contrib.auth.models import User
 class Run(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     comment = models.TextField(blank=True)
-    athlete = models.ForeignKey(User, on_delete=models.CASCADE)
+    athlete = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
