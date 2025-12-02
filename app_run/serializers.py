@@ -24,11 +24,11 @@ class AthleteSerializer(serializers.ModelSerializer):
 
 
 class RunReadSerializer(serializers.ModelSerializer):
-    athlete = AthleteSerializer(read_only=True)
+    athlete_data = AthleteSerializer(source="athlete", read_only=True)
 
     class Meta:
         model = Run
-        fields = '__all__'
+        fields = ['id', 'created_at', 'comment', 'athlete_data']
 
 class RunWriteSerializer(serializers.ModelSerializer):
 
