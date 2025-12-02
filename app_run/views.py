@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.conf import settings
@@ -19,13 +19,23 @@ def company_details(request):
     }
     return Response(details)
 
+
 class RunViewSet(viewsets.ModelViewSet):
-    queryset = Run.objects.select_related('athlete').all()
+    queryset = Run.objects.all()
 
     def get_serializer_class(self):
-        if self.action in ['list', 'retrieve']:
-            return RunReadSerializer
-        return RunWriteSerializer
+        if self.action == 'create':
+            return RunWriteSerializer
+        return RunReadSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        run = serializer.save()
+
+        # Сериализация сохраненного объекта с помощью RunReadSerializer
+        read_serializer = RunReadSerializer(run, context={'request': request})
+        return Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.filter(is_superuser=False)
