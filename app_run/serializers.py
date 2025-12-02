@@ -36,6 +36,7 @@ class RunWriteSerializer(serializers.ModelSerializer):
         fields = ['id', 'created_at', 'comment']
         read_only_fields = ['id', 'created_at']
 
+
     def create(self, validated_data):
         validated_data['athlete'] = self.context['request'].user
         return super().create(validated_data)
